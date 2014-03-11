@@ -242,7 +242,7 @@ function (angular, app, $, _, kbn, moment, timeSeries) {
       }
     };
 
-    $scope.get_data = function() {
+    $scope.get_data = function(noCache) {
       delete $scope.panel.error;
 
       $scope.panelMeta.loading = true;
@@ -258,6 +258,9 @@ function (angular, app, $, _, kbn, moment, timeSeries) {
         datasource: $scope.panel.datasource
       };
 
+      if (noCache) {
+        graphiteQuery.noCache = 1;
+      }
       $scope.annotationsPromise = annotationsSrv.getAnnotations($scope.filter, $scope.rangeUnparsed);
 
       return $scope.datasource.query($scope.filter, graphiteQuery)
@@ -280,6 +283,10 @@ function (angular, app, $, _, kbn, moment, timeSeries) {
         return;
       }
 
+      // We have requested json but got a png! - bail out
+      if (_.isString(results.data)) {
+        return;
+      }
       $scope.datapointsWarning = false;
       $scope.datapointsCount = 0;
       $scope.datapointsOutside = false;

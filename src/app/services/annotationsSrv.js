@@ -114,15 +114,17 @@ define([
       for (var i = 0; i < results.data.length; i++) {
         var target = results.data[i];
 
-        for (var y = 0; y < target.datapoints.length; y++) {
-          var datapoint = target.datapoints[y];
+        if (target.datapoints) {
+          for (var y = 0; y < target.datapoints.length; y++) {
+            var datapoint = target.datapoints[y];
 
-          if (datapoint[0]) {
-            addAnnotation({
-              annotation: annotation,
-              time: datapoint[1] * 1000,
-              description: target.target
-            });
+            if (datapoint[0]) {
+              addAnnotation({
+                annotation: annotation,
+                time: datapoint[1] * 1000,
+                description: target.target
+              });
+            }
           }
         }
       }
